@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/find-a-desk-importer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/pag-desksharing-admin-ui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/pag-desksharing-backend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/pag-desksharing-helm-chart" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/snipe-it" vcs="Git" />
+  </component>
+</project>
