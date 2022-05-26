@@ -27,17 +27,16 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
-
     public void deleteRefreshToken(String refreshToken, String username) {
         int countDelete = refreshTokenRepository.deleteRefreshTokenByTokenAndUsername(refreshToken, username);
-        if(countDelete == 0){
+        if (countDelete == 0) {
             throw new RuntimeException("Could not delete token");
         }
     }
 
     public void deleteOldRefreshTokenByUsername(String username) {
         int deleted = refreshTokenRepository.deleteRefreshTokenByUsernameAndCreatedAtIsBefore(username, LocalDateTime.now(clock));
-        if(deleted == 0) {
+        if (deleted == 0) {
             throw new RuntimeException("Could not delete token");
         }
     }

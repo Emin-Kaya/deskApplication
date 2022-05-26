@@ -49,14 +49,14 @@ public class UserAccount implements UserDetails {
     private ApplicationUser applicationUser;
 
     public void setRole(Role role) {
-        if(this.role == null) {
+        if (this.role == null) {
             this.role = role;
         }
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return singletonList(new SimpleGrantedAuthority("ROLE_"+role.name()));
+        return singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override

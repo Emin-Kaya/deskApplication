@@ -42,7 +42,7 @@ public class VerificationTokenService {
 
     public void deleteVerificationToken(String token) {
         int deleted = verificationTokenRepository.deleteVerificationTokenByToken(token);
-        if(deleted == 0) {
+        if (deleted == 0) {
             throw new RuntimeException("Could not delete token"); //TODO CUSTOM EXCEPTION
         }
     }
