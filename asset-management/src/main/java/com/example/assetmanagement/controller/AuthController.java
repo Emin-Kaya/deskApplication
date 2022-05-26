@@ -1,9 +1,7 @@
 package com.example.assetmanagement.controller;
 
 import com.example.assetmanagement.dto.*;
-import com.example.assetmanagement.entity.UserAccount;
 import com.example.assetmanagement.service.AuthService;
-import com.example.assetmanagement.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +17,9 @@ import static org.springframework.http.ResponseEntity.status;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserAccountService userAccountService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@Valid @RequestBody RegisterRequest loginRequest){
+    public ResponseEntity<String> signUp(@Valid @RequestBody RegisterRequest loginRequest) {
         authService.signUp(loginRequest);
         return status(HttpStatus.CREATED).body("Registration succesful.");
     }
@@ -53,9 +50,10 @@ public class AuthController {
         return status(HttpStatus.OK).body("Password changed!");
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<UserAccount> getProfilInformation() {
-        return status(HttpStatus.OK).body(userAccountService.getProfileInformation());
+    @PutMapping("/change/email")
+    public ResponseEntity<String> changeEmail(@RequestParam String email) {
+        authService.changeUserEmail(email);
+        return status(HttpStatus.OK).body("Email changed!");
     }
 
 }

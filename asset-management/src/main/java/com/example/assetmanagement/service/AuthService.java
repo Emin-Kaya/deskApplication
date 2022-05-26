@@ -4,17 +4,14 @@ import com.example.assetmanagement.dto.*;
 import com.example.assetmanagement.entity.Role;
 import com.example.assetmanagement.entity.UserAccount;
 import com.example.assetmanagement.entity.VerificationToken;
-import com.example.assetmanagement.mapper.ApplicationUserMapper;
 import com.example.assetmanagement.mapper.UserAccountMapper;
 import com.example.assetmanagement.repository.UserAccountRepository;
 import com.example.assetmanagement.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,7 +41,7 @@ public class AuthService {
         UserAccount userAccount = UserAccountMapper.INSTANCE.mapRequestToUserAccount(registerRequest);
 
         userAccount.setRole(Role.EMPLOYEE);
-        userAccount.setEnabled(false); //TODO email verifikation
+        userAccount.setEnabled(false);
         userAccountRepository.save(userAccount);
 
         String token = verificationTokenService.generateVerificationToken(userAccount);
@@ -54,7 +51,7 @@ public class AuthService {
     public String activateAccount(String token) {
         VerificationToken verificationToken = verificationTokenService.findVerificationTokenByToken(token); //TODO ÄNDER NAME
         String msg;
-        if(verificationToken.getExpiryDate().isBefore(LocalDateTime.now(clock))) {
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now(clock))) {
             sendNewActivationLink(verificationToken);
             msg = "Link is expired. We have sent you a new link";
         } else {
@@ -95,11 +92,17 @@ public class AuthService {
 
     public void changeUserPassword(PasswordChangeRequest passwordChangeRequest) {
         UserAccount userAccount = userAccountService.getProfileInformation();
-        if(!passwordEncoder.matches(passwordChangeRequest.getOldPassword(), userAccount.getPassword())) {
+        if (!passwordEncoder.matches(passwordChangeRequest.getOldPassword(), userAccount.getPassword())) {
             throw new RuntimeException("Invalid old password");
         }
         userAccount.setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
         refreshTokenService.deleteOldRefreshTokenByUsername(userAccount.getUsername());
+        userAccountService.updateUserAccount(userAccount);
+    }
+
+    public void changeUserEmail(String email) {
+        UserAccount userAccount = userAccountService.getCurrenUser();
+        userAccount.setEmail(email);
         userAccountService.updateUserAccount(userAccount);
     }
 

@@ -39,9 +39,7 @@ public class UserAccountService implements UserDetailsService {
     private UserAccount findUserByUsername(String username) {
         Optional<UserAccount> userAccountOpt = userAccountRepository.findByUsername(username);
 
-        UserAccount userAccount = userAccountOpt.orElseThrow(() -> new EntryNotFoundException("User account not found"));
-
-        return userAccount;
+        return userAccountOpt.orElseThrow(() -> new EntryNotFoundException("User account not found"));
     }
 
     public void enableUserAccount(VerificationToken verificationToken) {
@@ -64,8 +62,16 @@ public class UserAccountService implements UserDetailsService {
     }
 
     public UserAccount getProfileInformation() {
+        return findUserByUsername(getCurrenUser().getUsername());
+    }
+
+    public UserAccount getCurrenUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        return findUserByUsername(user.getUsername());
+        return findUserByUsername(authentication.getName());
+    }
+
+    public UserAccount findByUsername(String name) {
+        Optional<UserAccount> userAccount = userAccountRepository.findByUsername(name);
+        return userAccount.orElseThrow();
     }
 }
